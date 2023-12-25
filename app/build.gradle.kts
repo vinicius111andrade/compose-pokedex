@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
     id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+//    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -108,5 +108,5 @@ dependencies {
     implementation("androidx.hilt:hilt-compiler:1.2.0-alpha01") //kapt
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
 
-    implementation("com.android.support:palette-v7:28.0.0")
+    //implementation("com.android.support:palette-v7:28.0.0")
 }
