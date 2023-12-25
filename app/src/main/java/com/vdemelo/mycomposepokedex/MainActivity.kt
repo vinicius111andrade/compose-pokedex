@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.vdemelo.mycomposepokedex.ui.pokemon.list.PokemonListScreen
 import com.vdemelo.mycomposepokedex.ui.theme.MyComposePokedexTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = "pokemon_list_screen"
                 ) {
                     composable("pokemon_list_screen") {
-                        //All composables that we want in our screen
+                        PokemonListScreen(navController = navController)
                     }
 
                     composable(
