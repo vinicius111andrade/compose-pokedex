@@ -3,12 +3,12 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
     id("kotlin-kapt")
-//    id("dagger.hilt.android.plugin")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.vdemelo.mycomposepokedex"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.vdemelo.mycomposepokedex"
@@ -33,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -102,11 +102,13 @@ dependencies {
     implementation("com.google.accompanist:accompanist-coil:0.7.0")
 
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.33-beta")
-    implementation("com.google.dagger:hilt-android-compiler:2.33-beta") //kapt
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    implementation("androidx.hilt:hilt-compiler:1.2.0-alpha01") //kapt
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
+//    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-beta01")
+    implementation("androidx.hilt:hilt-*:1.2.0-alpha01")
+    kapt("androidx.hilt:hilt-*:1.2.0-alpha01")
+//    kapt("androidx.hilt:hilt-compiler:1.2.0-alpha01")
+//    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
 
     //implementation("com.android.support:palette-v7:28.0.0")
 }
