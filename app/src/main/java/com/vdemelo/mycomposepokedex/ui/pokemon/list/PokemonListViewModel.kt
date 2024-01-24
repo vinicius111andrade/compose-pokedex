@@ -36,29 +36,21 @@ class PokemonListViewModel @Inject constructor(
 
     fun loadPokemonPaginated() {
         viewModelScope.launch {
-            val result = repository.getPokemonList(PAGE_SIZE, currentPage * PAGE_SIZE)
+            val pokemonList = repository.getPokemonList(PAGE_SIZE, currentPage * PAGE_SIZE)
 
-            when (result) {
+            when (pokemonList) {
                 is Resource.Success -> {
-                    endReached.value = currentPage * PAGE_SIZE >= result.data!!.count
-                    val pokedexEntries = result.data.results.mapIndexed { index, entry ->
-                        val pokemonNumber = getPokemonNumber(entry)
-                        val spriteUrl = getPokemonSpriteUrl(pokemonNumber)
-                        PokedexListEntry(
-                            entry.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
-                            spriteUrl,
-                            pokemonNumber.toInt()
-                        )
-                    }
+                    endReached.value = currentPage * PAGE_SIZE >= pokemonList.data!!.count
+                    val pokedexEntries = pokemonList.data.results.map { it.toPokedexListEntry() }
                     currentPage++
 
                     loadError.value = ""
                     isLoading.value = false
-                    pokemonList.value += pokedexEntries
+                    this@PokemonListViewModel.pokemonList.value += pokedexEntries
                 }
 
                 is Resource.Error -> {
-                    loadError.value = result.message!!
+                    loadError.value = pokemonList.message!!
                     isLoading.value = false
                 }
             }
@@ -78,13 +70,23 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
-}
+    private fun Result.toPokedexListEntry(): PokedexListEntry {
+        val pokemonNumber = getPokemonNumber(this)
+        val spriteUrl = getPokemonSpriteUrl(pokemonNumber)
+        return PokedexListEntry(
+            this.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+            spriteUrl,
+            pokemonNumber.toInt()
+        )
+    }
 
-private fun getPokemonNumber(entry: Result): String {
-    val charsToBeDropped = if (entry.url.endsWith("/")) 1 else 0
-    return entry.url.dropLast(charsToBeDropped).takeLastWhile { it.isDigit() }
-}
+    private fun getPokemonNumber(result: Result): String {
+        val charsToBeDropped = if (result.url.endsWith("/")) 1 else 0
+        return result.url.dropLast(charsToBeDropped).takeLastWhile { it.isDigit() }
+    }
 
-private fun getPokemonSpriteUrl(pokemonNumber: String): String {
-    return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png"
+    private fun getPokemonSpriteUrl(pokemonNumber: String): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png"
+    }
+
 }
